@@ -134,7 +134,11 @@ Material:
     - _Steel_Color: {r: 0.6941177, g: 0.6941177, b: 0.6941177, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+<<<<<<< Updated upstream
 --- !u!114 &1954723197910065138
+=======
+--- !u!114 &3760477946196638927
+>>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -32,7 +32,11 @@ Material:
     - _Color_Ground: {r: 0.47003675, g: 0.5735674, b: 0.6415094, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+<<<<<<< Updated upstream
 --- !u!114 &5465463953528382248
+=======
+--- !u!114 &639258210970549871
+>>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "296967416158",
+    "firebase_url": "https://labrats-ee791-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "labrats-ee791",
+    "storage_bucket": "labrats-ee791.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296967416158:android:d55906cdd53be21b1d07cf",
+        "android_client_info": {
+          "package_name": "com.gg.LabRats"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyA9HjKIIH5kezJBmD_Dl2g8dhC_Ltyeg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

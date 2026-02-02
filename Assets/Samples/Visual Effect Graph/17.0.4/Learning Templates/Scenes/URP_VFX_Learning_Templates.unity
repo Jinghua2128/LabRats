@@ -2460,21 +2460,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2377313682719652882, guid: 3a08a8ebfe6ab4642b6f075038bdc1c3, type: 3}
       propertyPath: m_text
-      value: 'This VFX demonstrates how to use the <b>texture2D sample</b> operator
+      value: "\nThis VFX demonstrates how to use the <b>texture2D sample</b> operator
         to determine the color of particles and perform <b>rejection sampling</b>.
         We spawn particles in a 2D grid fashion and use their XY coordinates to <b>sample
         the texture</b>. We then kill the particles based on a threshold value of
-        the sampled texture values.
-
-
-        <b>Covered Aspects</b>:
-
-        Texture2D
-        Sample Operator
-
-        Alive attribute
-
-        Rejection Sampling'
+        the sampled texture values.\n\n<b>Covered Aspects</b>:\n\u2022 Texture2D
+        Sample Operator\n\u2022 Alive attribute\n\u2022 Rejection Sampling"
       objectReference: {fileID: 0}
     - target: {fileID: 2408670259278095987, guid: 3a08a8ebfe6ab4642b6f075038bdc1c3, type: 3}
       propertyPath: m_text
@@ -2548,12 +2539,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6812649016629805472, guid: 880de12b545a1a2438644f5c247282f7, type: 3}
       propertyPath: m_text
-      value: "<b>Particle's rotation</b> can be controlled by setting the <b>angle
-        attribute</b>. To get more realistic behavior, you can also, like in this
-        example, use the <b>angular velocity</b>. This attribute is usually set in
-        the <b>Initialize Context</b>, and then, the <b>Update Context</b> is responsible
-        to <b>integrate this angular velocity to update the Rotation</b>.\n\n<b>Covered
-        Aspects</b>: \nAngular Velocity \nAngle \nUpdate Rotation"
+      value: "\nThe <b>Particle\u2019s rotation</b> can be controlled by setting
+        the <b>angle attribute</b>. To get more realistic behavior, you can also,
+        like in this example, use the <b>angular velocity</b>. This attribute is
+        usually set in the <b>Initialize Context</b>, and then, the <b>Update Context</b>
+        is responsible for <b>integrating</b> this <b>angular velocity</b> to update
+        the rotation.\n\n<b>Covered Aspects</b>:\n\u2022 Angular Velocity\n\u2022
+        Angle\n\u2022 Update Rotation"
       objectReference: {fileID: 0}
     - target: {fileID: 6853316224602725313, guid: 880de12b545a1a2438644f5c247282f7, type: 3}
       propertyPath: m_text
@@ -3228,19 +3220,13 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 479498361658825341, guid: 6eb8621b47204894c9333821234ac421, type: 3}
       propertyPath: m_text
-      value: 'The <b>Bounds</b> are used to <b>cull</b> the VFX when it''s not in
+      value: "\nThe <b>Bounds</b> are used to <b>cull</b> the VFX when it's not in
         the <b>camera frustum</b>. <b>Bounds</b> can be manually or automatically
         set. The <b>VFX Bound</b> is the cumulative Bounds of each System within
-        a VFX Graph. In this example, the <b>Bounds</b> aren''t properly set up,
-        so the particles aren''t rendering correctly. Don''t hesitate to open the
-        VFX to correctly set the <b>Bounds.</b>
-
-
-        <b>Covered Aspects:</b>
-
-        Bounds
-
-        Culling'
+        a VFX Graph. In this example, the <b>Bounds</b> aren't properly set up, so
+        the particles aren't rendering correctly. Don't hesitate to open the VFX
+        to correctly set the <b>Bounds.</b>\n\n<b>Covered Aspects:</b>\n\u2022 Bounds\n\u2022
+        Culling"
       objectReference: {fileID: 0}
     - target: {fileID: 519954496486490140, guid: 6eb8621b47204894c9333821234ac421, type: 3}
       propertyPath: m_text
@@ -3946,12 +3932,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1236211679365451255, guid: e87a782c1562c324b8cc5d10beb585ad, type: 3}
       propertyPath: m_text
-      value: "Whether the <b>Output</b> is set to Quads, Meshes, or even Strips,
-        we often want to control how to instantiate the geometry on a particle. Should
-        it be <b>facing the camera</b>? What is the <b>forward</b> and/or <b>Up-Axis</b>
+      value: "\nWhether the <b>Output</b> is set to Quads, Meshes, or even strips,
+        we often want to control how to orient the geometry on a particle. Should
+        it be <b>facing the camera</b>? What is the <b>forward</b> or <b>Up-Axis</b>
         ? The Orient Block helps us to easily <b>orient</b> our particles as it comes
-        with a number of different modes. This example shows how to use the <b>Advanced
-        Mode</b>.\n\n<b>Covered Aspects:</b> \nOrient\nAxisX AxisY AxisZ \n "
+        with many handy modes. This example shows how to use the <b>Advanced Mode</b>.\n\n<b>Covered
+        Aspects:</b>\n\u2022 Orient\n\u2022 AxisX AxisY AxisZ"
       objectReference: {fileID: 0}
     - target: {fileID: 1236211679365451255, guid: e87a782c1562c324b8cc5d10beb585ad, type: 3}
       propertyPath: m_fontSize

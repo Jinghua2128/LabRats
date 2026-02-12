@@ -21,11 +21,6 @@ public class GameManager : MonoBehaviour
         public int seconds;
     }
 
-    private void Awake()
-    {
-        
-    }
-
     private void OnEnable()
     {
         // Reset timer whenever this object becomes active

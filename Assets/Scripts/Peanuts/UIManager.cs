@@ -53,8 +53,8 @@ public class UIManager : MonoBehaviour
         foreach (var input in panel.GetComponentsInChildren<TMP_InputField>(true))
             input.text = "";
 
-        foreach (var text in panel.GetComponentsInChildren<TMP_Text>(true))
-            text.text = "";
+        //foreach (var text in panel.GetComponentsInChildren<TMP_Text>(true))
+            //text.text = "";
     }
 
     // ---------- Scene start ----------

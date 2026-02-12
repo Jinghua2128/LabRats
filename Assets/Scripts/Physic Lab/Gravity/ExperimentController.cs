@@ -224,7 +224,7 @@ public class ExperimentController : MonoBehaviour
         float maxTime = Mathf.Max(landingTimes.ToArray());
         float difference = maxTime - minTime;
         
-        logText += $"\nTime difference: {difference:F3}s\n";
+        logText += $"\nTime difference: {difference:F3}s";
         
         if (difference < 0.1f)
         {

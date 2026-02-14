@@ -14,7 +14,7 @@ public class LoginPanelManager : MonoBehaviour
     [SerializeField] private TMP_Text inlineErrorText;
 
     [Header("Game Scene")]
-    [SerializeField] private string gameSceneName = "GameScene";
+    [SerializeField] private string gameSceneName = "01_MainArea";
 
     private FirebaseAuth auth;
 
@@ -66,7 +66,7 @@ public class LoginPanelManager : MonoBehaviour
                 DatabaseManager.Instance.SetCurrentUserId(user.UserId);
 
                 ClearFields();
-                SceneManager.LoadScene(gameSceneName);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(gameSceneName);
             });
     }
 

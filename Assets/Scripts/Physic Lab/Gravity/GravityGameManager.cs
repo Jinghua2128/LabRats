@@ -96,15 +96,12 @@ public class GravityLabGameManager : MonoBehaviour
 
         string progress = "=== EXPERIMENT PROGRESS ===\n\n";
 
-        // Objective 1: Change gravity
         progress += hasChangedGravity ? "✓" : "○";
         progress += $" Adjust gravity slider (by {minGravityChange}+)\n";
 
-        // Objective 2: Change height
         progress += hasChangedHeight ? "✓" : "○";
         progress += $" Adjust height slider (by {minHeightChange}+)\n";
 
-        // Objective 3: Run multiple experiments
         progress += hasRunMultipleExperiments ? "✓" : "○";
         progress += $" Run {requiredExperiments} experiments ({experimentsCompleted}/{requiredExperiments})\n";
 
@@ -133,7 +130,7 @@ public class GravityLabGameManager : MonoBehaviour
 
         if (completionText != null)
         {
-            string summary = "🎉 EXPERIMENT COMPLETE! 🎉\n\n";
+            string summary = "EXPERIMENT COMPLETE!\n\n";
             summary += $"Total experiments: {experimentsCompleted}\n";
             summary += $"Gravity values tested: {gravityValuesUsed.Count}\n";
             summary += $"Heights tested: {heightValuesUsed.Count}\n\n";
@@ -146,7 +143,7 @@ public class GravityLabGameManager : MonoBehaviour
             completionText.text = summary;
         }
 
-        Debug.Log("🎓 Student completed the gravity lab!");
+        Debug.Log("Student completed the gravity lab!");
     }
 
     public void RestartLab()

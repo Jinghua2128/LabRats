@@ -131,4 +131,13 @@ public class DatabaseManager : MonoBehaviour
         hasActiveLab = false;
         currentLabId = null;
     }
+
+    public void Logout()
+    {
+        currentUserId = null;
+        hasActiveLab = false;
+        currentLabId = null;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("00_Login");
+        Debug.Log("[DBM] User logged out");
+    }
 }

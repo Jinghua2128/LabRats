@@ -14,8 +14,7 @@ public class RatButton : MonoBehaviour
 
     PanelAudio FindActivePanel()
     {
-        PanelAudio[] panels = FindObjectsOfType<PanelAudio>();
-
+        PanelAudio[] panels = Object.FindObjectsByType<PanelAudio>(FindObjectsSortMode.None);
         foreach (PanelAudio panel in panels)
         {
             if (panel.gameObject.activeInHierarchy)

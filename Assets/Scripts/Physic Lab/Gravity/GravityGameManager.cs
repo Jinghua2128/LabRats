@@ -3,7 +3,11 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
-public class GravityLabGameManager : MonoBehaviour
+// [ADDED]
+using System;
+using System.Reflection;
+
+public class GravityLabGameManager : MonoBehaviour, ILab
 {
     [Header("References")]
     public ExperimentController experimentController;
@@ -32,9 +36,17 @@ public class GravityLabGameManager : MonoBehaviour
     private float initialGravity;
     private float initialHeight;
 
+    public string LabId => "GravityLab";
+
+    [Header("Firebase Saving (Added)")]
+    [SerializeField] private float liveSaveInterval = 3f;
+
+    private float labStartTime;
+    private float liveSaveTimer;
+    private int experimentCounter = 0;
+
     void Start()
     {
-        // Subscribe to experiment completion
         if (experimentController != null)
         {
             experimentController.OnExperimentComplete += OnExperimentCompleted;
@@ -52,6 +64,18 @@ public class GravityLabGameManager : MonoBehaviour
             completionPanel.SetActive(false);
 
         UpdateProgressDisplay();
+
+        GameManager.Instance?.RegisterActiveLab(this);
+    }
+
+    private void Update()
+    {
+        liveSaveTimer += Time.deltaTime;
+        if (liveSaveTimer >= liveSaveInterval)
+        {
+            liveSaveTimer = 0f;
+            SaveLive();
+        }
     }
 
     void OnGravityChanged(float value)
@@ -88,6 +112,8 @@ public class GravityLabGameManager : MonoBehaviour
 
         UpdateProgressDisplay();
         CheckCompletion();
+
+        SaveExperimentToFirebase(data);
     }
 
     void UpdateProgressDisplay()
@@ -169,6 +195,8 @@ public class GravityLabGameManager : MonoBehaviour
 
         experimentController.ResetExperiment();
         UpdateProgressDisplay();
+
+        BeginLab();
     }
 
     void OnDestroy()
@@ -177,5 +205,40 @@ public class GravityLabGameManager : MonoBehaviour
         {
             experimentController.OnExperimentComplete -= OnExperimentCompleted;
         }
+    }
+
+    public void BeginLab()
+    {
+        labStartTime = Time.time;
+        liveSaveTimer = 0f;
+        experimentCounter = 0;
+
+        // Initialize branch
+        DatabaseManager.Instance?.SetLabFieldPath(LabId, "Time_Passed", 0);
+    }
+
+    public void SaveLive()
+    {
+        int seconds = Mathf.FloorToInt(Time.time - labStartTime);
+        DatabaseManager.Instance?.SetLabFieldPath(LabId, "Time_Passed", seconds);
+    }
+
+    public void SaveAndClose()
+    {
+        SaveLive();
+    }
+    private void SaveExperimentToFirebase(ExperimentData data)
+    {
+        if (DatabaseManager.Instance == null) return;
+
+        experimentCounter++;
+        string expPath = $"{LabId}/Experiments/{experimentCounter}";
+
+        DatabaseManager.Instance.SetLabFieldPath(expPath, "Gravity", data.gravity);
+        DatabaseManager.Instance.SetLabFieldPath(expPath, "Distance", data.height);
+        DatabaseManager.Instance.SetLabFieldPath(expPath, "Duration", data.fallTimes[0]);
+
+        float seconds = Time.time - labStartTime;
+        DatabaseManager.Instance.SetLabFieldPath(expPath, "RecordedAtSeconds", seconds);
     }
 }

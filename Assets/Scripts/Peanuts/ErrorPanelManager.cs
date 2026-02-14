@@ -5,15 +5,13 @@ public class ErrorPanelManager : MonoBehaviour
 {
     public static ErrorPanelManager Instance;
 
-    [Header("Error UI")]
+    [Header("UI References")]
     [SerializeField] private GameObject errorPanel;
     [SerializeField] private TMP_Text errorText;
 
-    [Header("Behaviour")]
-    [SerializeField] private bool listenToGlobalLogs = true;
-    [SerializeField] private bool showExceptions = true;
-    [SerializeField] private bool showErrors = true;
-    [SerializeField] private bool showWarnings = false;
+    [Header("Optional Settings")]
+    [SerializeField] private bool listenToGlobalErrors = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,44 +28,17 @@ public class ErrorPanelManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (listenToGlobalLogs)
-        {
+        if (listenToGlobalErrors)
             Application.logMessageReceived += HandleLog;
-        }
     }
 
     private void OnDisable()
     {
-        if (listenToGlobalLogs)
-        {
+        if (listenToGlobalErrors)
             Application.logMessageReceived -= HandleLog;
-        }
     }
 
-    private void HandleLog(string logString, string stackTrace, LogType type)
-    {
-        bool shouldShow = false;
-
-        switch (type)
-        {
-            case LogType.Exception:
-                shouldShow = showExceptions;
-                break;
-            case LogType.Error:
-                shouldShow = showErrors;
-                break;
-            case LogType.Warning:
-                shouldShow = showWarnings;
-                break;
-        }
-
-        if (!shouldShow)
-            return;
-
-        string message = logString;
-
-        ShowError(message);
-    }
+    // -------- Public API --------
 
     public void ShowError(string message)
     {
@@ -82,5 +53,15 @@ public class ErrorPanelManager : MonoBehaviour
     {
         if (errorPanel != null)
             errorPanel.SetActive(false);
+    }
+
+    // -------- Optional Global Catcher --------
+
+    private void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        if (type == LogType.Error || type == LogType.Exception)
+        {
+            ShowError(logString);
+        }
     }
 }

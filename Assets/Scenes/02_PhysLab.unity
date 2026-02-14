@@ -2917,6 +2917,7 @@ MonoBehaviour:
   requiredExperiments: 5
   minGravityChange: 5
   minHeightChange: 3
+  liveSaveInterval: 3
 --- !u!4 &626122022
 Transform:
   m_ObjectHideFlags: 0
@@ -6870,12 +6871,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3473547104858909363, guid: 43ab19d78304d2e4a8c1b55dfafa018d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 960671269}
-    - targetCorrespondingSourceObject: {fileID: 5023804697436070448, guid: 43ab19d78304d2e4a8c1b55dfafa018d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1586184038}
     - targetCorrespondingSourceObject: {fileID: -1647145617430431205, guid: 43ab19d78304d2e4a8c1b55dfafa018d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1322855582}
+    - targetCorrespondingSourceObject: {fileID: 5023804697436070448, guid: 43ab19d78304d2e4a8c1b55dfafa018d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1586184038}
     - targetCorrespondingSourceObject: {fileID: 6640268544835987579, guid: 43ab19d78304d2e4a8c1b55dfafa018d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2071611508}

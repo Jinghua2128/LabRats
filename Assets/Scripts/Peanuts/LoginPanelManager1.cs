@@ -10,11 +10,8 @@ public class LoginPanelManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailInput;
     [SerializeField] private TMP_InputField passwordInput;
 
-    // Optional inline error text
-    [SerializeField] private TMP_Text inlineErrorText;
-
     [Header("Game Scene")]
-    [SerializeField] private string gameSceneName = "GameScene";
+    [SerializeField] private string gameSceneName = "02_PhysLab";
 
     private FirebaseAuth auth;
 
@@ -51,7 +48,13 @@ public class LoginPanelManager : MonoBehaviour
             {
                 if (task.IsCanceled || task.IsFaulted)
                 {
-                    ShowError("Login failed: " + GetFirebaseErrorMessage(task.Exception));
+                    // Log full exception for debugging
+                    Debug.LogError("[Login] Firebase Error:\n" + task.Exception);
+
+                    // Show Firebase's message (even if generic)
+                    string msg = task.Exception?.Flatten().InnerExceptions[0].Message;
+                    ShowError("Login failed:\n" + msg);
+
                     return;
                 }
 
@@ -70,33 +73,14 @@ public class LoginPanelManager : MonoBehaviour
             });
     }
 
-    // -------- Helpers --------
-
     private void ShowError(string message)
     {
         ErrorPanelManager.Instance?.ShowError(message);
-
-        if (inlineErrorText != null)
-            inlineErrorText.text = message;
-    }
-
-    private string GetFirebaseErrorMessage(System.AggregateException ex)
-    {
-        if (ex == null) return "Unknown error.";
-
-        foreach (var inner in ex.InnerExceptions)
-        {
-            if (!string.IsNullOrEmpty(inner.Message))
-                return inner.Message;
-        }
-
-        return ex.Message;
     }
 
     private void ClearFields()
     {
         emailInput.text = "";
         passwordInput.text = "";
-        if (inlineErrorText != null) inlineErrorText.text = "";
     }
 }

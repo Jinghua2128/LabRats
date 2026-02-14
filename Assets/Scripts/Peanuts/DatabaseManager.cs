@@ -1,17 +1,14 @@
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Firebase.Database;
-using Firebase.Extensions;
-using System;
 
 public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager Instance { get; private set; }
 
     private DatabaseReference rootRef;
-
     private string currentUserId;
-    private string currentLabId;
-    private bool hasActiveLab = false;
 
     private void Awake()
     {
@@ -24,15 +21,13 @@ public class DatabaseManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        TryInitRootRef();
         Debug.Log("[DBM] Awake");
     }
 
-    // ---------- Helpers ----------
-
-    private bool EnsureRootRef()
+    private bool TryInitRootRef()
     {
-        if (rootRef != null)
-            return true;
+        if (rootRef != null) return true;
 
         try
         {
@@ -48,7 +43,6 @@ public class DatabaseManager : MonoBehaviour
     }
 
     public bool HasUser => !string.IsNullOrEmpty(currentUserId);
-    public bool HasActiveLab => hasActiveLab;
 
     // ---------- User ----------
 
@@ -64,71 +58,98 @@ public class DatabaseManager : MonoBehaviour
         Debug.Log("[DBM] User set: " + currentUserId);
     }
 
-    // ---------- Labs ----------
+    // ---------- Generic Lab Writes ----------
 
-    public void StartLab(string labId)
+    /// <summary>
+    /// Writes to:
+    /// Users/<uid>/Labs/<relativePath>/<fieldName> = value
+    ///
+    /// Example:
+    /// relativePath = "GravityLab/Experiments/1"
+    /// fieldName = "Duration"
+    /// value = 2.5f
+    /// </summary>
+    public Task SetLabFieldPath(string relativePath, string fieldName, object value)
     {
-        if (!EnsureRootRef() || !HasUser)
+        if (!HasUser)
         {
-            Debug.LogWarning("[DBM] Cannot start lab (no root/user)");
-            return;
+            Debug.LogWarning("[DBM] SetLabFieldPath called but no user is set.");
+            return Task.CompletedTask;
         }
 
-        currentLabId = labId;
-        hasActiveLab = true;
+        if (!TryInitRootRef())
+        {
+            Debug.LogWarning("[DBM] SetLabFieldPath failed (no rootRef).");
+            return Task.CompletedTask;
+        }
 
-        var labRef = rootRef
-            .Child("Users")
-            .Child(currentUserId)
-            .Child("Labs")
-            .Child(labId);
+        try
+        {
+            DatabaseReference r = rootRef
+                .Child("Users")
+                .Child(currentUserId)
+                .Child("Labs");
 
-        // Ensure base fields exist
-        labRef.Child("Time_Passed").SetValueAsync("0");
-        labRef.Child("Input_Text").SetValueAsync("");
+            // Split "GravityLab/Experiments/1" into parts
+            if (!string.IsNullOrEmpty(relativePath))
+            {
+                var parts = relativePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var p in parts)
+                    r = r.Child(p);
+            }
 
-        Debug.Log($"[DBM] Lab started: {labId}");
+            if (!string.IsNullOrEmpty(fieldName))
+                r = r.Child(fieldName);
+
+            return r.SetValueAsync(value);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("[DBM] SetLabFieldPath exception\n" + e);
+            ErrorPanelManager.Instance?.ShowError("Failed to save lab data. Check console.");
+            return Task.CompletedTask;
+        }
     }
 
-    public void UpdateCurrentLab(int seconds, string inputText)
+    /// <summary>
+    /// Optional helper if you ever want to overwrite a whole node:
+    /// Users/<uid>/Labs/<relativePath> = value
+    /// </summary>
+    public Task SetLabNode(string relativePath, object value)
     {
-        if (!hasActiveLab || !EnsureRootRef())
-            return;
+        if (!HasUser)
+        {
+            Debug.LogWarning("[DBM] SetLabNode called but no user is set.");
+            return Task.CompletedTask;
+        }
 
-        var labRef = rootRef
-            .Child("Users")
-            .Child(currentUserId)
-            .Child("Labs")
-            .Child(currentLabId);
+        if (!TryInitRootRef())
+        {
+            Debug.LogWarning("[DBM] SetLabNode failed (no rootRef).");
+            return Task.CompletedTask;
+        }
 
-        labRef.Child("Time_Passed").SetValueAsync(seconds.ToString());
-        labRef.Child("Input_Text").SetValueAsync(inputText ?? "");
-    }
+        try
+        {
+            DatabaseReference r = rootRef
+                .Child("Users")
+                .Child(currentUserId)
+                .Child("Labs");
 
-    // Generic field writer for lab-specific data
-    public void SetLabField(string labId, string fieldName, string value)
-    {
-        if (!EnsureRootRef() || !HasUser)
-            return;
+            if (!string.IsNullOrEmpty(relativePath))
+            {
+                var parts = relativePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var p in parts)
+                    r = r.Child(p);
+            }
 
-        rootRef
-            .Child("Users")
-            .Child(currentUserId)
-            .Child("Labs")
-            .Child(labId)
-            .Child(fieldName)
-            .SetValueAsync(value);
-    }
-
-    public void EndCurrentLab(int finalSeconds, string finalInput)
-    {
-        if (!hasActiveLab)
-            return;
-
-        UpdateCurrentLab(finalSeconds, finalInput);
-
-        Debug.Log($"[DBM] Lab ended: {currentLabId}");
-        hasActiveLab = false;
-        currentLabId = null;
+            return r.SetValueAsync(value);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("[DBM] SetLabNode exception\n" + e);
+            ErrorPanelManager.Instance?.ShowError("Failed to save lab data. Check console.");
+            return Task.CompletedTask;
+        }
     }
 }

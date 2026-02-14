@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject signupPanel;
-
+    [SerializeField] private GameObject errorPanel;
+    
     [Header("Intro Fade")]
     [SerializeField] private CanvasGroup introCanvasGroup;
     [SerializeField] private float fadeInDuration = 2f;
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
         choicePanel?.SetActive(false);
         loginPanel?.SetActive(false);
         signupPanel?.SetActive(false);
+
     }
 
     private void ClearInputs(GameObject panel)
@@ -52,9 +54,6 @@ public class UIManager : MonoBehaviour
 
         foreach (var input in panel.GetComponentsInChildren<TMP_InputField>(true))
             input.text = "";
-
-        //foreach (var text in panel.GetComponentsInChildren<TMP_Text>(true))
-            //text.text = "";
     }
 
     // ---------- Scene start ----------

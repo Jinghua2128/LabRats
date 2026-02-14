@@ -11,9 +11,6 @@ public class SignupPanelManager : MonoBehaviour
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private TMP_InputField confirmPasswordInput;
 
-    // Optional inline error text (can be null)
-    [SerializeField] private TMP_Text inlineErrorText;
-
     private FirebaseAuth auth;
 
     private void Start()
@@ -33,7 +30,6 @@ public class SignupPanelManager : MonoBehaviour
         string password = passwordInput.text;
         string confirmPassword = confirmPasswordInput.text;
 
-        // --- Validation ---
         if (string.IsNullOrEmpty(email) || !email.Contains("@") || !email.Contains("."))
         {
             ShowError("Invalid e-mail address.");
@@ -58,19 +54,18 @@ public class SignupPanelManager : MonoBehaviour
             return;
         }
 
-        // --- Firebase signup ---
         auth.CreateUserWithEmailAndPasswordAsync(email, password)
             .ContinueWithOnMainThread(task =>
             {
                 if (task.IsCanceled || task.IsFaulted)
                 {
-                    ShowError("Signup failed: " + GetFirebaseErrorMessage(task.Exception));
+                    ShowError("Signup failed:\n" + GetFirebaseErrorMessage(task.Exception));
                     return;
                 }
 
                 FirebaseUser user = task.Result.User;
 
-                // Write profile (email only)
+                // Save Profile (email only)
                 FirebaseDatabase.DefaultInstance.RootReference
                     .Child("Users")
                     .Child(user.UserId)
@@ -85,14 +80,9 @@ public class SignupPanelManager : MonoBehaviour
             });
     }
 
-    // -------- Helpers --------
-
     private void ShowError(string message)
     {
         ErrorPanelManager.Instance?.ShowError(message);
-
-        if (inlineErrorText != null)
-            inlineErrorText.text = message;
     }
 
     private string GetFirebaseErrorMessage(System.AggregateException ex)
@@ -113,6 +103,5 @@ public class SignupPanelManager : MonoBehaviour
         emailInput.text = "";
         passwordInput.text = "";
         confirmPasswordInput.text = "";
-        if (inlineErrorText != null) inlineErrorText.text = "";
     }
 }

@@ -44,8 +44,6 @@ public class DatabaseManager : MonoBehaviour
 
     public bool HasUser => !string.IsNullOrEmpty(currentUserId);
 
-    // ---------- User ----------
-
     public void SetCurrentUserId(string userId)
     {
         if (string.IsNullOrEmpty(userId))
@@ -58,17 +56,6 @@ public class DatabaseManager : MonoBehaviour
         Debug.Log("[DBM] User set: " + currentUserId);
     }
 
-    // ---------- Generic Lab Writes ----------
-
-    /// <summary>
-    /// Writes to:
-    /// Users/<uid>/Labs/<relativePath>/<fieldName> = value
-    ///
-    /// Example:
-    /// relativePath = "GravityLab/Experiments/1"
-    /// fieldName = "Duration"
-    /// value = 2.5f
-    /// </summary>
     public Task SetLabFieldPath(string relativePath, string fieldName, object value)
     {
         if (!HasUser)
@@ -90,7 +77,6 @@ public class DatabaseManager : MonoBehaviour
                 .Child(currentUserId)
                 .Child("Labs");
 
-            // Split "GravityLab/Experiments/1" into parts
             if (!string.IsNullOrEmpty(relativePath))
             {
                 var parts = relativePath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -111,10 +97,6 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Optional helper if you ever want to overwrite a whole node:
-    /// Users/<uid>/Labs/<relativePath> = value
-    /// </summary>
     public Task SetLabNode(string relativePath, object value)
     {
         if (!HasUser)
@@ -152,13 +134,9 @@ public class DatabaseManager : MonoBehaviour
             return Task.CompletedTask;
         }
     }
-
-    public void Logout()
+        public void ClearCurrentUser()
     {
         currentUserId = null;
-        hasActiveLab = false;
-        currentLabId = null;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("00_Login");
-        Debug.Log("[DBM] User logged out");
+        Debug.Log("[DBM] User cleared (logout).");
     }
 }

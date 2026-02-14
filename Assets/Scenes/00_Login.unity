@@ -9025,10 +9025,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a1ded00db1876b418fef6eb720e6c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailInput: {fileID: 0}
-  passwordInput: {fileID: 0}
-  inlineErrorText: {fileID: 0}
-  gameSceneName: GameScene
+  emailInput: {fileID: 740185578}
+  passwordInput: {fileID: 1114263780}
 --- !u!114 &1443612838
 MonoBehaviour:
   m_ObjectHideFlags: 0

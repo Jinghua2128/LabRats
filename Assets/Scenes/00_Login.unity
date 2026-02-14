@@ -9866,7 +9866,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   emailInput: {fileID: 740185578}
   passwordInput: {fileID: 1114263780}
-  gameSceneName: 02_PhysLab
+  gameSceneName: 01_MainArea
 --- !u!114 &1443612838
 MonoBehaviour:
   m_ObjectHideFlags: 0

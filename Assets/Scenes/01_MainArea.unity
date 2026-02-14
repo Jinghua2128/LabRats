@@ -22266,7 +22266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -22282,7 +22282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SceneManager, Assembly-CSharp
+      value: GameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -113743,7 +113743,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -113759,7 +113759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SceneManager, Assembly-CSharp
+      value: GameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7463273262244810516, guid: df426a2b821604ddba62ee065deede1c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -119128,12 +119128,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130147934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8924452b7b7fe4608a474c9070f6623c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2b195a1d70a6a46920aa4c064a0b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainArea: 01_MainArea
-  PhysLab: 02_PhysLab
-  ChemLab: 03_ChemLab
+  loginScene: 00_Login
+  mainAreaScene: 01_MainArea
+  physLabScene: 02_PhysLab
+  chemLabScene: 03_ChemLab
 --- !u!4 &2130147936
 Transform:
   m_ObjectHideFlags: 0
@@ -120339,7 +120340,7 @@ RectTransform:
   m_GameObject: {fileID: 5968338485880082011}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4091454, y: 1, z: 1}
+  m_LocalScale: {x: 1.3194673, y: 0.93636, z: 0.93636}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4974646635188098212}
@@ -120491,8 +120492,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1818689687}
-        m_TargetAssemblyTypeName: DatabaseManager, Assembly-CSharp
+      - m_Target: {fileID: 2130147935}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Logout
         m_Mode: 1
         m_Arguments:
@@ -121070,7 +121071,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

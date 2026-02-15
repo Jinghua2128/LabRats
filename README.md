@@ -49,6 +49,8 @@ Educational VR application built with Unity and the XR Interaction Toolkit.
 
 - **VR UI Interaction Sensitivity**: Sliders may require precise ray positioning depending on controller tracking.
 
+- **Currently Only have one working lab**: Only gravity lab is working and circuit lab is still work in progress.
+
 ---
 
 ## Puzzle / Experiment Answers

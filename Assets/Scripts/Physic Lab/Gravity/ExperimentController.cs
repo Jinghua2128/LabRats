@@ -1,25 +1,83 @@
+/*
+ * File: ExperimentController.cs
+ * Project: LabRats - Physics Lab (Gravity)
+ * Description: Controls gravity experiment simulation with falling objects of different masses.
+ *              Manages experiment execution, timing, and data collection to demonstrate Galileo's principle.
+ * 
+ * Author: Liu GuangXuan
+ * Organization: G²KM Studio
+ * Copyright: © 2026 G²KM Studio. All rights reserved.
+ * 
+ * Created: 2026
+ * Last Modified: 2026-02-15
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
+/// <summary>
+/// Controls gravity experiments by managing falling objects and measuring their fall times.
+/// Demonstrates that objects of different masses fall at the same rate in a vacuum (Galileo's principle).
+/// </summary>
 public class ExperimentController : MonoBehaviour
 {
+    /// <summary>
+    /// UI Controls for experiment parameters.
+    /// </summary>
     [Header("UI")]
+    /// <summary>
+    /// Slider to adjust gravity force (m/s²).
+    /// </summary>
     public Slider gravitySlider;
+    
+    /// <summary>
+    /// Slider to adjust drop height (meters).
+    /// </summary>
     public Slider heightSlider;
 
+    /// <summary>
+    /// Display components for experiment data.
+    /// </summary>
     [Header("Display")]
+    /// <summary>
+    /// Text display for experiment data and results.
+    /// </summary>
     public TextMeshProUGUI dataText;
 
+    /// <summary>
+    /// Prefabs for falling objects with different masses.
+    /// </summary>
     [Header("Object Prefabs")]
+    /// <summary>
+    /// Prefab for light object (0.5 kg).
+    /// </summary>
     public GameObject lightObjectPrefab;
+    
+    /// <summary>
+    /// Prefab for medium object (2 kg).
+    /// </summary>
     public GameObject mediumObjectPrefab;
+    
+    /// <summary>
+    /// Prefab for heavy object (5 kg).
+    /// </summary>
     public GameObject heavyObjectPrefab;
+    
+    /// <summary>
+    /// Transform marking the base spawn position for objects.
+    /// </summary>
     public Transform spawnHeight;
 
+    /// <summary>
+    /// Ground reference for collision detection.
+    /// </summary>
     [Header("Ground")]
-    public GameObject ground; // Drag your ground object here
+    /// <summary>
+    /// The ground GameObject that objects will collide with.
+    /// </summary>
+    public GameObject ground;
 
     private float startTime;
     private bool experimentRunning;
@@ -29,6 +87,9 @@ public class ExperimentController : MonoBehaviour
     private List<bool> objectsLanded;
     private List<float> landingTimes;
 
+    /// <summary>
+    /// Callback invoked when an experiment completes with all objects landed.
+    /// </summary>
     public System.Action<ExperimentData> OnExperimentComplete;
 
     void Start()
@@ -119,7 +180,10 @@ public class ExperimentController : MonoBehaviour
         }
     }
 
-    // Called when an object hits the ground
+    /// <summary>
+    /// Called when a falling object hits the ground. Records landing time and freezes the object.
+    /// </summary>
+    /// <param name="obj">The GameObject that hit the ground.</param>
     public void ObjectHitGround(GameObject obj)
     {
         // Find which object this is
@@ -165,6 +229,9 @@ public class ExperimentController : MonoBehaviour
         spawnedObjects.Clear();
     }
 
+    /// <summary>
+    /// Starts a new gravity experiment by spawning objects and beginning the timer.
+    /// </summary>
     public void StartFall()
     {
         logText = "";
@@ -257,6 +324,9 @@ public class ExperimentController : MonoBehaviour
         dataText.text = header + status + logText;
     }
 
+    /// <summary>
+    /// Resets the experiment by stopping the current run and destroying all spawned objects.
+    /// </summary>
     public void ResetExperiment()
     {
         experimentRunning = false;
@@ -270,11 +340,21 @@ public class ExperimentController : MonoBehaviour
     }
 }
 
-// Simple collision detector - part of the same file
+/// <summary>
+/// Detects collisions between falling objects and the ground.
+/// Notifies the ExperimentController when an object lands.
+/// </summary>
 public class CollisionDetector : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to the ExperimentController managing this experiment.
+    /// </summary>
     [HideInInspector]
     public ExperimentController controller;
+    
+    /// <summary>
+    /// Reference to the ground GameObject to detect collisions with.
+    /// </summary>
     [HideInInspector]
     public GameObject ground;
     
@@ -291,11 +371,29 @@ public class CollisionDetector : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Data structure containing results from a single gravity experiment.
+/// </summary>
 [System.Serializable]
 public class ExperimentData
 {
+    /// <summary>
+    /// The gravity value used in the experiment (m/s²).
+    /// </summary>
     public float gravity;
+    
+    /// <summary>
+    /// The drop height used in the experiment (meters).
+    /// </summary>
     public float height;
+    
+    /// <summary>
+    /// List of object masses used in the experiment (kg).
+    /// </summary>
     public List<float> masses;
+    
+    /// <summary>
+    /// List of fall times for each object (seconds).
+    /// </summary>
     public List<float> fallTimes;
 }

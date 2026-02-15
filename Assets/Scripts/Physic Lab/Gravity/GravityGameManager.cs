@@ -1,3 +1,17 @@
+/*
+ * File: GravityGameManager.cs
+ * Project: LabRats - Physics Lab (Gravity)
+ * Description: Manages the gravity lab game flow, tracking student progress, experiment completion,
+ *              and Firebase data synchronization. Implements the ILab interface for lab management.
+ * 
+ * Author: Liu GuangXuan
+ * Organization: G²KM Studio
+ * Copyright: © 2026 G²KM Studio. All rights reserved.
+ * 
+ * Created: 2026
+ * Last Modified: 2026-02-15
+ */
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,22 +21,69 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 
+/// <summary>
+/// Manages the gravity lab game flow including progress tracking, completion criteria,
+/// and Firebase integration. Tracks student experiments and validates learning objectives.
+/// Implements ILab interface for centralized lab management.
+/// </summary>
 public class GravityLabGameManager : MonoBehaviour, ILab
 {
+    /// <summary>
+    /// Core component references.
+    /// </summary>
     [Header("References")]
+    /// <summary>
+    /// Reference to the ExperimentController managing individual experiments.
+    /// </summary>
     public ExperimentController experimentController;
+    
+    /// <summary>
+    /// UI slider for adjusting gravity.
+    /// </summary>
     public Slider gravitySlider;
+    
+    /// <summary>
+    /// UI slider for adjusting drop height.
+    /// </summary>
     public Slider heightSlider;
 
+    /// <summary>
+    /// UI elements for displaying progress and completion.
+    /// </summary>
     [Header("Progress Display")]
+    /// <summary>
+    /// Text display showing current experiment progress.
+    /// </summary>
     public TextMeshProUGUI progressText;
+    
+    /// <summary>
+    /// Panel shown when lab is completed.
+    /// </summary>
     public GameObject completionPanel;
+    
+    /// <summary>
+    /// Text display for completion message.
+    /// </summary>
     public TextMeshProUGUI completionText;
 
+    /// <summary>
+    /// Lab completion requirements.
+    /// </summary>
     [Header("Requirements")]
-    public int requiredExperiments = 5; // Student must run 5 experiments
-    public float minGravityChange = 5f; // Must change gravity by at least 5
-    public float minHeightChange = 3f;  // Must change height by at least 3
+    /// <summary>
+    /// Number of experiments required for lab completion.
+    /// </summary>
+    public int requiredExperiments = 5;
+    
+    /// <summary>
+    /// Minimum gravity change required (m/s²).
+    /// </summary>
+    public float minGravityChange = 5f;
+    
+    /// <summary>
+    /// Minimum height change required (meters).
+    /// </summary>
+    public float minHeightChange = 3f;
 
     // Tracking
     private HashSet<string> gravityValuesUsed = new HashSet<string>();
@@ -36,9 +97,18 @@ public class GravityLabGameManager : MonoBehaviour, ILab
     private float initialGravity;
     private float initialHeight;
 
+    /// <summary>
+    /// Unique identifier for this lab (implements ILab interface).
+    /// </summary>
     public string LabId => "GravityLab";
 
+    /// <summary>
+    /// Firebase integration settings.
+    /// </summary>
     [Header("Firebase Saving (Added)")]
+    /// <summary>
+    /// Interval in seconds between automatic live saves to Firebase.
+    /// </summary>
     [SerializeField] private float liveSaveInterval = 3f;
 
     private float labStartTime;
@@ -172,6 +242,9 @@ public class GravityLabGameManager : MonoBehaviour, ILab
         Debug.Log("Student completed the gravity lab!");
     }
 
+    /// <summary>
+    /// Resets all lab progress and restarts the lab from the beginning.
+    /// </summary>
     public void RestartLab()
     {
         // Reset all tracking
@@ -204,6 +277,9 @@ public class GravityLabGameManager : MonoBehaviour, ILab
         }
     }
 
+    /// <summary>
+    /// Initializes the lab session and starts timing (implements ILab interface).
+    /// </summary>
     public void BeginLab()
     {
         labStartTime = Time.time;
@@ -214,16 +290,27 @@ public class GravityLabGameManager : MonoBehaviour, ILab
         DatabaseManager.Instance?.SetLabFieldPath(LabId, "Time_Passed", 0);
     }
 
+    /// <summary>
+    /// Saves current lab progress to Firebase in real-time (implements ILab interface).
+    /// </summary>
     public void SaveLive()
     {
         int seconds = Mathf.FloorToInt(Time.time - labStartTime);
         DatabaseManager.Instance?.SetLabFieldPath(LabId, "Time_Passed", seconds);
     }
 
+    /// <summary>
+    /// Performs final save before closing the lab (implements ILab interface).
+    /// </summary>
     public void SaveAndClose()
     {
         SaveLive();
     }
+    
+    /// <summary>
+    /// Saves individual experiment data to Firebase database.
+    /// </summary>
+    /// <param name="data">The experiment data to save.</param>
     private void SaveExperimentToFirebase(ExperimentData data)
     {
         if (DatabaseManager.Instance == null) return;

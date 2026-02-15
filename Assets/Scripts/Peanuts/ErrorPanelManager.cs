@@ -5,11 +5,13 @@ public class ErrorPanelManager : MonoBehaviour
 {
     public static ErrorPanelManager Instance;
 
-    [Header("UI References")]
+    // ---------- UI References ----------
+
     [SerializeField] private GameObject errorPanel;
     [SerializeField] private TMP_Text errorText;
 
-    [Header("Optional Settings")]
+    // ---------- Optional Settings ----------
+
     [SerializeField] private bool listenToGlobalErrors = false;
 
     private void Awake()
@@ -22,12 +24,14 @@ public class ErrorPanelManager : MonoBehaviour
 
         Instance = this;
 
+        // Ensures error UI starts hidden
         if (errorPanel != null)
             errorPanel.SetActive(false);
     }
 
     private void OnEnable()
     {
+        // Listens for Unity console errors and shows them in UI
         if (listenToGlobalErrors)
             Application.logMessageReceived += HandleLog;
     }
@@ -38,7 +42,7 @@ public class ErrorPanelManager : MonoBehaviour
             Application.logMessageReceived -= HandleLog;
     }
 
-    // -------- Public API --------
+    // ---------- Public API ----------
 
     public void ShowError(string message)
     {
@@ -55,13 +59,12 @@ public class ErrorPanelManager : MonoBehaviour
             errorPanel.SetActive(false);
     }
 
-    // -------- Optional Global Catcher --------
+    // ---------- Global Catcher ----------
 
     private void HandleLog(string logString, string stackTrace, LogType type)
     {
+        // Catches errors from anywhere in the app and shows them in the error panel
         if (type == LogType.Error || type == LogType.Exception)
-        {
             ShowError(logString);
-        }
     }
 }

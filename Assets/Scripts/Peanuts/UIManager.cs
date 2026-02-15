@@ -6,15 +6,17 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("Panels")]
+    // ---------- Panels ----------
+
     [SerializeField] private GameObject landingPanel;
     [SerializeField] private GameObject introPanel;
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject signupPanel;
     [SerializeField] private GameObject errorPanel;
-    
-    [Header("Intro Fade")]
+
+    // ---------- Intro Fade ----------
+
     [SerializeField] private CanvasGroup introCanvasGroup;
     [SerializeField] private float fadeInDuration = 2f;
     [SerializeField] private float displayDuration = 4f;
@@ -36,7 +38,7 @@ public class UIManager : MonoBehaviour
         ShowLanding();
     }
 
-    // ---------- Core helpers ----------
+    // ---------- Core Helpers ----------
 
     private void DisableAllPanels()
     {
@@ -45,23 +47,24 @@ public class UIManager : MonoBehaviour
         choicePanel?.SetActive(false);
         loginPanel?.SetActive(false);
         signupPanel?.SetActive(false);
-
+        errorPanel?.SetActive(false);
     }
 
     private void ClearInputs(GameObject panel)
     {
         if (panel == null) return;
 
+        // Clears all TMP input fields under the given panel
         foreach (var input in panel.GetComponentsInChildren<TMP_InputField>(true))
             input.text = "";
     }
 
-    // ---------- Scene start ----------
+    // ---------- Scene Start ----------
 
     public void ShowLanding()
     {
         DisableAllPanels();
-        landingPanel.SetActive(true);
+        landingPanel?.SetActive(true);
     }
 
     // ---------- Landing → Intro → Choice ----------
@@ -73,31 +76,35 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator IntroRoutine()
     {
-        introPanel.SetActive(true);
-        introCanvasGroup.alpha = 0f;
+        introPanel?.SetActive(true);
 
-        // Fade in
+        if (introCanvasGroup != null)
+            introCanvasGroup.alpha = 0f;
+
+        // Fades intro screen in
         float t = 0f;
         while (t < fadeInDuration)
         {
             t += Time.deltaTime;
-            introCanvasGroup.alpha = t / fadeInDuration;
+            if (introCanvasGroup != null)
+                introCanvasGroup.alpha = t / fadeInDuration;
             yield return null;
         }
 
         yield return new WaitForSeconds(displayDuration);
         landingPanel?.SetActive(false);
 
-        // Fade out
+        // Fades intro screen out
         t = 0f;
         while (t < fadeOutDuration)
         {
             t += Time.deltaTime;
-            introCanvasGroup.alpha = 1f - (t / fadeOutDuration);
+            if (introCanvasGroup != null)
+                introCanvasGroup.alpha = 1f - (t / fadeOutDuration);
             yield return null;
         }
 
-        introPanel.SetActive(false);
+        introPanel?.SetActive(false);
         ShowChoice();
     }
 
@@ -106,7 +113,7 @@ public class UIManager : MonoBehaviour
     public void ShowChoice()
     {
         DisableAllPanels();
-        choicePanel.SetActive(true);
+        choicePanel?.SetActive(true);
     }
 
     // ---------- Login / Signup ----------
@@ -115,14 +122,14 @@ public class UIManager : MonoBehaviour
     {
         DisableAllPanels();
         ClearInputs(loginPanel);
-        loginPanel.SetActive(true);
+        loginPanel?.SetActive(true);
     }
 
     public void ShowSignup()
     {
         DisableAllPanels();
         ClearInputs(signupPanel);
-        signupPanel.SetActive(true);
+        signupPanel?.SetActive(true);
     }
 
     public void BackToChoice()

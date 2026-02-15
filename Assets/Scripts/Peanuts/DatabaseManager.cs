@@ -10,8 +10,11 @@ public class DatabaseManager : MonoBehaviour
     private DatabaseReference rootRef;
     private string currentUserId;
 
+    public bool HasUser => !string.IsNullOrEmpty(currentUserId);
+
     private void Awake()
     {
+        // Singleton that persists across scenes
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -22,8 +25,9 @@ public class DatabaseManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         TryInitRootRef();
-        Debug.Log("[DBM] Awake");
     }
+
+    // ---------- Initialization ----------
 
     private bool TryInitRootRef()
     {
@@ -31,44 +35,38 @@ public class DatabaseManager : MonoBehaviour
 
         try
         {
+            // Gets the root reference for Firebase Realtime Database
             rootRef = FirebaseDatabase.DefaultInstance.RootReference;
-            Debug.Log("[DBM] rootRef acquired");
             return true;
         }
-        catch (Exception e)
+        catch
         {
-            Debug.LogError("[DBM] Failed to get rootRef\n" + e);
             return false;
         }
     }
 
-    public bool HasUser => !string.IsNullOrEmpty(currentUserId);
+    // ---------- User Context ----------
 
     public void SetCurrentUserId(string userId)
     {
-        if (string.IsNullOrEmpty(userId))
-        {
-            Debug.LogWarning("[DBM] SetCurrentUserId called with empty ID");
-            return;
-        }
-
+        // Stores user ID so future saves go to the correct user node
+        if (string.IsNullOrEmpty(userId)) return;
         currentUserId = userId;
-        Debug.Log("[DBM] User set: " + currentUserId);
     }
+
+    public void ClearCurrentUser()
+    {
+        // Clears user ID on logout
+        currentUserId = null;
+    }
+
+    // ---------- Lab Saving ----------
 
     public Task SetLabFieldPath(string relativePath, string fieldName, object value)
     {
-        if (!HasUser)
-        {
-            Debug.LogWarning("[DBM] SetLabFieldPath called but no user is set.");
+        // Prevents saving when no user is logged in
+        if (!HasUser || !TryInitRootRef())
             return Task.CompletedTask;
-        }
-
-        if (!TryInitRootRef())
-        {
-            Debug.LogWarning("[DBM] SetLabFieldPath failed (no rootRef).");
-            return Task.CompletedTask;
-        }
 
         try
         {
@@ -87,29 +85,20 @@ public class DatabaseManager : MonoBehaviour
             if (!string.IsNullOrEmpty(fieldName))
                 r = r.Child(fieldName);
 
+            // Saves a single field to Firebase
             return r.SetValueAsync(value);
         }
-        catch (Exception e)
+        catch
         {
-            Debug.LogError("[DBM] SetLabFieldPath exception\n" + e);
-            ErrorPanelManager.Instance?.ShowError("Failed to save lab data. Check console.");
             return Task.CompletedTask;
         }
     }
 
     public Task SetLabNode(string relativePath, object value)
     {
-        if (!HasUser)
-        {
-            Debug.LogWarning("[DBM] SetLabNode called but no user is set.");
+        // Prevents saving when no user is logged in
+        if (!HasUser || !TryInitRootRef())
             return Task.CompletedTask;
-        }
-
-        if (!TryInitRootRef())
-        {
-            Debug.LogWarning("[DBM] SetLabNode failed (no rootRef).");
-            return Task.CompletedTask;
-        }
 
         try
         {
@@ -125,18 +114,12 @@ public class DatabaseManager : MonoBehaviour
                     r = r.Child(p);
             }
 
+            // Saves an entire node to Firebase
             return r.SetValueAsync(value);
         }
-        catch (Exception e)
+        catch
         {
-            Debug.LogError("[DBM] SetLabNode exception\n" + e);
-            ErrorPanelManager.Instance?.ShowError("Failed to save lab data. Check console.");
             return Task.CompletedTask;
         }
-    }
-        public void ClearCurrentUser()
-    {
-        currentUserId = null;
-        Debug.Log("[DBM] User cleared (logout).");
     }
 }

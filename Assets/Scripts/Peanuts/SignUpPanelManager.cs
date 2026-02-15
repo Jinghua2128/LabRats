@@ -6,7 +6,8 @@ using Firebase.Database;
 
 public class SignupPanelManager : MonoBehaviour
 {
-    [Header("UI References")]
+    // ---------- UI References ----------
+
     [SerializeField] private TMP_InputField emailInput;
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private TMP_InputField confirmPasswordInput;
@@ -18,8 +19,11 @@ public class SignupPanelManager : MonoBehaviour
         auth = FirebaseAuth.DefaultInstance;
     }
 
+    // ---------- Signup ----------
+
     public void Signup()
     {
+        // Validates input fields before attempting signup
         if (emailInput == null || passwordInput == null || confirmPasswordInput == null)
         {
             ShowError("Signup UI not configured correctly.");
@@ -30,6 +34,7 @@ public class SignupPanelManager : MonoBehaviour
         string password = passwordInput.text;
         string confirmPassword = confirmPasswordInput.text;
 
+        // Basic validation of email and password fields
         if (string.IsNullOrEmpty(email) || !email.Contains("@") || !email.Contains("."))
         {
             ShowError("Invalid e-mail address.");
@@ -54,9 +59,11 @@ public class SignupPanelManager : MonoBehaviour
             return;
         }
 
+        // Creates a new Firebase Auth account
         auth.CreateUserWithEmailAndPasswordAsync(email, password)
             .ContinueWithOnMainThread(task =>
             {
+                // Handles signup errors and shows them in UI
                 if (task.IsCanceled || task.IsFaulted)
                 {
                     ShowError("Signup failed:\n" + GetFirebaseErrorMessage(task.Exception));
@@ -65,7 +72,7 @@ public class SignupPanelManager : MonoBehaviour
 
                 FirebaseUser user = task.Result.User;
 
-                // Save Profile (email only)
+                // Saves basic profile info to Realtime Database
                 FirebaseDatabase.DefaultInstance.RootReference
                     .Child("Users")
                     .Child(user.UserId)
@@ -75,10 +82,12 @@ public class SignupPanelManager : MonoBehaviour
 
                 ClearFields();
 
-                // After signup → Login panel
+                // Returns to login screen after signup
                 UIManager.Instance?.ShowLogin();
             });
     }
+
+    // ---------- Helpers ----------
 
     private void ShowError(string message)
     {
@@ -89,6 +98,7 @@ public class SignupPanelManager : MonoBehaviour
     {
         if (ex == null) return "Unknown error.";
 
+        // Extracts the most relevant error message from Firebase exceptions
         foreach (var inner in ex.InnerExceptions)
         {
             if (!string.IsNullOrEmpty(inner.Message))
@@ -100,6 +110,7 @@ public class SignupPanelManager : MonoBehaviour
 
     private void ClearFields()
     {
+        //clears input fields after successful signup/ leaving the panel
         emailInput.text = "";
         passwordInput.text = "";
         confirmPasswordInput.text = "";

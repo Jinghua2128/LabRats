@@ -6,64 +6,54 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("Scene Names")]
+    // ---------- Scene Names ----------
+
     [SerializeField] private string loginScene = "00_Login";
     [SerializeField] private string mainAreaScene = "01_MainArea";
     [SerializeField] private string physLabScene = "02_PhysLab";
     [SerializeField] private string chemLabScene = "03_ChemLab";
 
     private ILab activeLab;
-    [Header("Game Scene")]
-    [SerializeField] private string MainArea = "01_MainArea";
-    [SerializeField] private string PhysLab = "02_PhysLab";
-    [SerializeField] private string ChemLab = "03_ChemLab";
-    public void LoadPhysLab(string PhysLab)
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(PhysLab);
-    }
-    public void LoadChemLab(string ChemLab)
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(ChemLab);
-    }
-    public void LoadMainArea(string MainArea)
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(MainArea);
-    }
 
     private void Awake()
     {
+        // Singleton that persists across scenes
         if (Instance != null && Instance != this)
-        {
             return;
-        }
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-        public void Logout()
+    // ---------- Logout ----------
+
+    public void Logout()
     {
+        // Saves any active lab before leaving
         activeLab?.SaveAndClose();
         activeLab = null;
 
+        // Logs out from Firebase Auth
         FirebaseAuth.DefaultInstance.SignOut();
 
+        // Clears user context from DatabaseManager
         DatabaseManager.Instance?.ClearCurrentUser();
 
         LoadLogin();
     }
 
-    // -------------------------
-    // Lab Coordination
-    // -------------------------
+    // ---------- Lab Coordination ----------
+
     public void RegisterActiveLab(ILab lab)
     {
+        // Tracks current lab so it can be saved on exit/logout
         activeLab = lab;
         activeLab?.BeginLab();
     }
 
     public void ExitLabToMainArea()
     {
+        // Saves lab progress before returning to main area
         activeLab?.SaveAndClose();
         activeLab = null;
 
@@ -72,15 +62,15 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        // Ensures lab data saves if the app closes
         activeLab?.SaveAndClose();
     }
 
-    // -------------------------
-    // Scene Flow
-    // -------------------------
+    // ---------- Scene Flow ----------
+
     public void LoadLogin()
     {
-        // Leaving any lab? Save first.
+        // Ensures lab save happens before returning to login
         activeLab?.SaveAndClose();
         activeLab = null;
 

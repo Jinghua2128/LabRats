@@ -4,6 +4,7 @@ Educational VR application built with Unity and the XR Interaction Toolkit.
 
 ## LabStats
 [Website: https://labrats-ee791.firebaseapp.com/](https://labrats-ee791.firebaseapp.com/)
+
 [Github: https://github.com/Jinghua2128/LabStats](https://github.com/Jinghua2128/LabStats)
 
 ## Table of Contents

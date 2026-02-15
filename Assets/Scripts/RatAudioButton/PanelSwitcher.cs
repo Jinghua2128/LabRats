@@ -1,3 +1,6 @@
+//Made by Gracie Arianne Peh 11/02/25
+//Small script to change panels with a button
+
 using UnityEngine;
 
 public class PanelSwitcher : MonoBehaviour

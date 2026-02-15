@@ -1,3 +1,7 @@
+//Made by Gracie Arianne Peh 11/02/25
+//Small script to play narration audio linked to panel
+
+
 using UnityEngine;
 
 public class PanelAudio : MonoBehaviour

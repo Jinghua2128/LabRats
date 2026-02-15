@@ -72,13 +72,6 @@ Change each slider at least 5 times and the completion panel will pop up.
 
 ## Group Member Credits
 
-### Keagan (Ng Kiang Hwee)
-- Main game flow coding (from classroom scene to experiment)
-- Secondary ITD coder
-- Database saving
-- Authentication
-- Prop modelling (Lightbulb)
-
 ### Liu GuangXuan
 - Main game flow coding (fixing some bugs, refining flow)
 - Main ITD coder
@@ -86,6 +79,14 @@ Change each slider at least 5 times and the completion panel will pop up.
 - Scene set up for gravity lab
 - Some vfx
 - Website authentication
+- Website UI design
+
+### Keagan (Ng Kiang Hwee)
+- Main game flow coding (from classroom scene to experiment)
+- Secondary ITD coder
+- Database saving
+- Authentication
+- Prop modelling (Lightbulb)
 
 ### Arai Mio Ashley
 - Scene set up for corridor and labs
